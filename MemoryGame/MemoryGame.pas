@@ -29,23 +29,25 @@ Procedure Starting_Game;
     BEGIN
     {Kullaniciya oyunun basladigi gösterilir.}
     kelime:='Starting the Memory Game'; 
-    for i:=1 to 4 do begin
-       		     q:='';
-    		     a:=1;   
-    		     while  a<25  do begin 
-                    			Clrscr;
-                    			kelime_2:=kelime;
-		    			kelime_2[a]:=Upcase(kelime_2[a]);             
-	            			CASE a mod 3 OF
-                         		0:q:='/';
-                         		1:q:='-';
-                         		2:q:='\';
-                         		else ; 
-		    			end;{Case Of'un end'i}
-		    			Write('[+] ',kelime_2,'...',q);Delay(100);
-                    			a+=1;
-                    			end;{while'in end'i}
-                    end;{for'un end'i}
+    for i:=1 to 4 do 
+    	begin
+       	q:='';
+    		a:=1;   
+    		while  a<25 do
+					begin 
+          	Clrscr;
+            kelime_2:=kelime;
+		    		kelime_2[a]:=Upcase(kelime_2[a]);             
+	          CASE a mod 3 OF
+            	0:q:='/';
+              1:q:='-';
+              2:q:='\';
+             	else ; 
+		    		end;{Case Of'un end'i}
+		    		Write('[+] ',kelime_2,'...',q);Delay(100);
+            a+=1;
+        	end;{while'in end'i}
+      end;{for'un end'i}
     END;
 Procedure Input_Parameters;
     BEGIN
@@ -53,57 +55,65 @@ Procedure Input_Parameters;
     Clrscr;
     Joker:=1;
     a:=1;
-    While a=1 do begin 
-                 Write('The name of the user:');Readln(u_name);
-                 if oyun_oynamak>1 then begin 
-					k:=1;
-				        for i:=1 to oyun_oynamak-1 do begin 
-								      if toplam_oyuncu[i]=u_name then begin 
-												      a:=1;Write('Lutfen bir kere kullanilan oyuncu ismini tekrardan girmeyiniz:');Writeln; 
-												      end
-												 else begin a:=2; end;    
-								      end;
+    While a=1 do
+			begin 
+      	Write('The name of the user:');Readln(u_name);
+        if oyun_oynamak>1 then
+					begin 
+						k:=1;
+				    for i:=1 to oyun_oynamak-1 do
+							begin 
+							if toplam_oyuncu[i]=u_name then
+								begin 
+									a:=1;Write('Lutfen bir kere kullanilan oyuncu ismini tekrardan girmeyiniz:');Writeln; 
+								end
+							else begin a:=2; end;    
+							end;
 					end
-                                   else begin a:=2; end;
-                 end;
+        else begin a:=2; end;
+      end;
     Clrscr;
     a:=1;
-    While a=1 do begin
-                 Writeln('The name of the user:',u_name);   	
-    		 Write('The number of columns:');Readln(length);
-                 if (length<=16) And (length>=10) then a:=0
-                                                  else begin Clrscr;Writeln('Please put 10<=(the number of columns)<=16 '); end;
-                 end;
+    While a=1 do
+			begin
+        Writeln('The name of the user:',u_name);   	
+    		Write('The number of columns:');Readln(length);
+        if (length<=16) And (length>=10) then a:=0
+        else begin Clrscr;Writeln('Please put 10<=(the number of columns)<=16 '); end;
+      end;
     Clrscr;
     a:=1;
-    While a=1 do begin
-                 Writeln('The name of the user:',u_name);
-                 Writeln('The number of columns:',length); 
-                 Write('The number of rows:');Readln(width);
-                 if (width<=10) And (width>=6) then a:=0
-					       else begin Clrscr;Writeln('Please put 6<=(the number of rows)<=10'); end; 
-    		 end;
+    While a=1 do
+			begin
+      	Writeln('The name of the user:',u_name);
+        Writeln('The number of columns:',length); 
+        Write('The number of rows:');Readln(width);
+        if (width<=10) And (width>=6) then a:=0
+				else begin Clrscr;Writeln('Please put 6<=(the number of rows)<=10'); end; 
+    	end;
     Clrscr;
     a:=1;
-    While a=1 do begin
-                 Writeln('The name of the user:',u_name);
-                 Writeln('The number of columns:',length);
-                 Writeln('The number of rows:',width);
-                 Write('The number of transition cell at one column:');Readln(tcell);
-                 if (tcell<=3) And (tcell>=1) then a:=0
-                                              else begin Clrscr;Writeln('Please put 1<=(transition cell at one column)<=3 '); end;
-                 end;
+    While a=1 do 
+			begin
+      	Writeln('The name of the user:',u_name);
+       	Writeln('The number of columns:',length);
+        Writeln('The number of rows:',width);
+        Write('The number of transition cell at one column:');Readln(tcell);
+        if (tcell<=3) And (tcell>=1) then a:=0
+        else begin Clrscr;Writeln('Please put 1<=(transition cell at one column)<=3 '); end;
+      end;
     Clrscr;
     a:=1;
-    While a=1 do begin
-                 Writeln('The name of the user:',u_name);
-                 Writeln('The number of columns:',length);
-                 Writeln('The number of rows:',width);
-                 Writeln('The number of transition cell at one column:',tcell);
-                 Write('The board will be displayed for time seconds:');Readln(time);
-                 if (time<=60) And (time>=10) then a:=0
-                                               else begin Clrscr; Writeln('Please put 10<=(Time)<=60 '); end;
-                 end;
+    While a=1 do 
+			begin
+      	Writeln('The name of the user:',u_name);
+        Writeln('The number of columns:',length);
+        Writeln('The number of rows:',width);
+        Writeln('The number of transition cell at one column:',tcell);
+        Write('The board will be displayed for time seconds:');Readln(time);
+        if (time<=60) And (time>=10) then a:=0
+        else begin Clrscr; Writeln('Please put 10<=(Time)<=60 '); end;
+      end;
    Clrscr;
    Writeln('The name of the user:',u_name);
    Writeln('The number of columns:',length);
@@ -165,7 +175,7 @@ Procedure Show_Real_Matrix;
    END;
 Procedure Show_Fake_Matrix;
    BEGIN
-   {*Sahte matris gösterilir.(*) larla dolu olan.*}
+   {*Sahte matris gösterilir.(\*) larla dolu olan.*}
    {*Oyunun icinde kontrol etmeler*}
    {for i:=1 to tcell do begin satir_dizisi[i]:=0; end;}{Gerekirse bu yazilir zaten üzerine değer aticaz.Yani yazmamiza gerek yok.}
 		 for i:=1 to length do begin
