@@ -1,15 +1,17 @@
 program v3_donem_odevi;
 Uses Crt;
-Var  i,j,r:integer;
-     e:integer;
-     m,n,g:integer;
-     x:integer;
-     f,d:integer;
-     k,l,q,w:integer;
-     dizi:Array[1..18] of integer;
-     dizi2:Array[1..18] of integer;
-     C:Array[1..6,1..6] of char;
-     T:Array[1..6,1..6] of char;
+Var 
+    i,j,r:integer;
+    e:integer;
+    currentx, currenty:integer;
+    m,n,g:integer;
+    x:integer;
+    f,d:integer;
+    k,l,q,w:integer;
+    dizi:Array[1..18] of integer;
+    dizi2:Array[1..18] of integer;
+    C:Array[1..6,1..6] of char;
+    T:Array[1..6,1..6] of char;
 Begin
     Clrscr;
     {*-------------------------------------------------------------------------------------------------------------------------------*}
@@ -43,14 +45,24 @@ Begin
                         dizi[m]:=x;
                         e:=0;
                         CASE x OF
-                            1:C[i][j]:='%';
-                            2:C[i][j]:='#';
-                            3:C[i][j]:='!';
-                            4:C[i][j]:='~';
-                            5:C[i][j]:='?';
-                            6:C[i][j]:='&';
-                            7:C[i][j]:='|';
-                            8:C[i][j]:='+';
+                            1:C[i][j]:='1';
+                            2:C[i][j]:='2';
+                            3:C[i][j]:='3';
+                            4:C[i][j]:='4';
+                            5:C[i][j]:='5';
+                            6:C[i][j]:='6';
+                            7:C[i][j]:='7';
+                            8:C[i][j]:='8';
+                            9:C[i][j]:='%';
+                            10:C[i][j]:='#';
+                            11:C[i][j]:='!';
+                            12:C[i][j]:='~';
+                            13:C[i][j]:='?';
+                            14:C[i][j]:='&';
+                            15:C[i][j]:='|';
+                            16:C[i][j]:='+';
+                            17:C[i][j]:='9';
+                            18:C[i][j]:='0';
                         end;{case'in end'i}
                         T[i][j]:='-'
                     end;{else'in end'i}	    
@@ -72,31 +84,29 @@ Begin
                         m-=1;
                         e:=0;
                         CASE x OF
-                            1:C[i][j]:='%';
-                            2:C[i][j]:='#';
-                            3:C[i][j]:='!';
-                            4:C[i][j]:='~';
-                            5:C[i][j]:='?';
-                            6:C[i][j]:='&';
-                            7:C[i][j]:='|';
-                            8:C[i][j]:='+';
+                            1:C[i][j]:='1';
+                            2:C[i][j]:='2';
+                            3:C[i][j]:='3';
+                            4:C[i][j]:='4';
+                            5:C[i][j]:='5';
+                            6:C[i][j]:='6';
+                            7:C[i][j]:='7';
+                            8:C[i][j]:='8';
+                            9:C[i][j]:='%';
+                            10:C[i][j]:='#';
+                            11:C[i][j]:='!';
+                            12:C[i][j]:='~';
+                            13:C[i][j]:='?';
+                            14:C[i][j]:='&';
+                            15:C[i][j]:='|';
+                            16:C[i][j]:='+';
+                            17:C[i][j]:='9';
+                            18:C[i][j]:='0';
                         end;{case'in end'i}
                         T[i][j]:='-' 
                     end;{else'in end'i}	
                 end;{else kolunun end'i}        
             end;{while'in end'i}
-            {*
-            CASE x OF
-                1:C[i][j]:='%'
-                2:C[i][j]:='#'
-                3:C[i][j]:='!'
-                4:C[i][j]:='~'
-                5:C[i][j]:='?'
-                6:C[i][j]:='&'
-                7:C[i][j]:='|'
-                8:C[i][j]:='+'
-            end;{case'in end'i}
-            *}	     	
         end;{2.for'un end'i}  
     end;{1.for'un end'i}
 {*--------------------------------------------------------------------------------------------------------------------------------------------*}
@@ -133,11 +143,19 @@ Begin
                 gotoxy(2*j+1,i+2);Write(T[i][j]);
             end;
         end;
-        Readln;
+        Writeln();
         Write('Secilen matris elemanin satiri:');Readln(k);
         Write('Secilen matris elemanin sutunu:');Readln(l);
+        currentx := WhereX;
+        currenty := WhereY;
+        gotoxy(2*l+1, k+2);Write(C[k][l]);
+        gotoxy(currentx, currenty);
         Write('Hedef matris elemanin satiri:');Readln(q);
         Write('Hedef matris elemanin sutunu:');Readln(w);
+        currentx := WhereX;
+        currenty := WhereY;
+        gotoxy(2*w+1, q+2);Write(C[q][w]);
+        gotoxy(currentx, currenty);
 {*--------------------------------------------------------------------------------------------------------------------------------------------*}
 {*Matrisin elemanlari kiyaslanir.Ve esitse diger matriste gosterilir.*}               
         if C[k][l]=C[q][w] then
@@ -152,7 +170,9 @@ Begin
 		    Write('Yanlis bildin...(Her yanlis 1 hakkini alir)');
             d+=1;
         end;
-        Readln;Clrscr;
+        //Readln;Clrscr;
+        Delay(5000);
+        Clrscr;
         if f=(n) then begin d:=5; end;                                        
 	end;{while'in end'i}
     if d=5 then begin Write('Tebrikler.Hepsini dogru bildin.');end;
