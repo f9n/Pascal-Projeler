@@ -4,19 +4,47 @@ Var
     i,j,r:integer;
     e:integer;
     currentx, currenty:integer;
+    playerScore, computerScore: integer;
+    toplamDogruSayisi: integer;
+    siraIndeksi:integer;
+    computerPredictionX1, computerPredictionY1, computerPredictionX2, computerPredictionY2: integer;
     m,n,g:integer;
     x:integer;
-    f,d:integer;
     k,l,q,w:integer;
     dizi:Array[1..18] of integer;
     dizi2:Array[1..18] of integer;
     C:Array[1..6,1..6] of char;
     T:Array[1..6,1..6] of char;
+Procedure Display_Game_Info;
+BEGIN
+    for i:=1 to n do
+    begin
+        gotoxy(1,i+2);Write(i,'|');
+        gotoxy(2*i+1,1);Write(i);
+        gotoxy(2*i+1,2);Write('=');
+        for j:=1 to n do
+        begin
+            gotoxy(2*j+1,i+2);Write(T[i][j]);
+        end;
+    end;
+    Writeln();
+    Write('Oyuncunun Puani: ');
+    Writeln(playerScore);
+    Write('Bilgisayarin Puani: ');
+    Writeln(computerScore);
+    Writeln();
+END;
 Begin
     Clrscr;
+    //Starting_Game;
     {*-------------------------------------------------------------------------------------------------------------------------------*}
     {*Matrisin buyuklugu alinir ve Matrisin elemanlari bilgisayar uretir.*}
     Write('Matrisinin buyuklugunu giriniz:');Readln(n);
+    if n mod 2 = 1 then
+    begin
+        Write('Cift sayi girmelisin!');
+        exit;
+    end;
     g:=Trunc(n*n/2);
     for i:=1 to g do begin dizi[i]:=0;dizi2[i]:=0 end;
     m:=0;
@@ -128,54 +156,68 @@ Begin
     end;
 {*--------------------------------------------------------------------------------------------------------------------------------------------*}
     {*Oyunun icinde kontrol etmeler*}
-    d:=1;f:=0;
-    while d<4 do
+    playerScore := 0;
+    computerScore := 0;
+    toplamDogruSayisi := 0;
+    siraIndeksi := 0;
+    while toplamDogruSayisi < g do
     begin
 {*--------------------------------------------------------------------------------------------------------------------------------------------*}
 {*Matrisin elemanlari kapalidir.Ve bilmeye calisiriz.*}
-	    for i:=1 to n do
-        begin
-            gotoxy(1,i+2);Write(i,'|');
-            gotoxy(2*i+1,1);Write(i);
-            gotoxy(2*i+1,2);Write('=');
-            for j:=1 to n do
-            begin
-                gotoxy(2*j+1,i+2);Write(T[i][j]);
+        Display_Game_Info;
+        if siraIndeksi mod 2 = 0 then
+        begin {* sira kullanicida *}
+            Write('Secilen matris elemanin satiri:');Readln(k);
+            Write('Secilen matris elemanin sutunu:');Readln(l);
+            currentx := WhereX;
+            currenty := WhereY;
+            gotoxy(2*l+1, k+2);Write(C[k][l]);
+            gotoxy(currentx, currenty);
+            Write('Hedef matris elemanin satiri:');Readln(q);
+            Write('Hedef matris elemanin sutunu:');Readln(w);
+            currentx := WhereX;
+            currenty := WhereY;
+            gotoxy(2*w+1, q+2);Write(C[q][w]);
+            gotoxy(currentx, currenty);
+    {*--------------------------------------------------------------------------------------------------------------------------------------------*}
+    {*Matrisin elemanlari kiyaslanir.Ve esitse diger matriste gosterilir.*}               
+            if C[k][l]=C[q][w] then
+            begin 
+                Write('Dogru bildin...Aferin. Her dogru 1 puan verir.');
+                toplamDogruSayisi+=1;
+                playerScore+=1;
+                T[k][l]:=C[k][l];
+                T[q][w]:=C[q][w];
+            end
+            else
+            begin 
+                Write('Yanlis bildin...(Her yanlis ta bir sey olmaz.)');
             end;
-        end;
-        Writeln();
-        Write('Secilen matris elemanin satiri:');Readln(k);
-        Write('Secilen matris elemanin sutunu:');Readln(l);
-        currentx := WhereX;
-        currenty := WhereY;
-        gotoxy(2*l+1, k+2);Write(C[k][l]);
-        gotoxy(currentx, currenty);
-        Write('Hedef matris elemanin satiri:');Readln(q);
-        Write('Hedef matris elemanin sutunu:');Readln(w);
-        currentx := WhereX;
-        currenty := WhereY;
-        gotoxy(2*w+1, q+2);Write(C[q][w]);
-        gotoxy(currentx, currenty);
-{*--------------------------------------------------------------------------------------------------------------------------------------------*}
-{*Matrisin elemanlari kiyaslanir.Ve esitse diger matriste gosterilir.*}               
-        if C[k][l]=C[q][w] then
-        begin 
-	        Write('Dogru bildin...Aferin');
-            f+=1;
-            T[k][l]:=C[k][l];
-            T[q][w]:=C[q][w];
+            Delay(5000);
         end
-        else
-        begin 
-		    Write('Yanlis bildin...(Her yanlis 1 hakkini alir)');
-            d+=1;
+        else {* sira bilgisayarda *}
+        begin
+            Writeln('Sira bilgisayarda aq.');
+            computerPredictionX1 := Random(g)+1;
+            computerPredictionY1 := Random(g)+1;
+            currentx := WhereX;
+            currenty := WhereY;
+            gotoxy(2*computerPredictionY1+1, computerPredictionX1+2);Write(C[computerPredictionX1][computerPredictionY1]);
+            gotoxy(currentx, currenty);
+            Delay(2000);
+            computerPredictionX2 := Random(g)+1;
+            computerPredictionY2 := Random(g)+1;
+            currentx := WhereX;
+            currenty := WhereY;
+            gotoxy(2*computerPredictionY2+1, computerPredictionX2+2);Write(C[computerPredictionX2][computerPredictionY2]);
+            gotoxy(currentx, currenty);
+            Readln();
         end;
         //Readln;Clrscr;
-        Delay(5000);
         Clrscr;
-        if f=(n) then begin d:=5; end;                                        
+        siraIndeksi+=1;                
 	end;{while'in end'i}
-    if d=5 then begin Write('Tebrikler.Hepsini dogru bildin.');end;
+    Write('Tebrikler.Oyun tamamlandi.');
     Readln;
 End.
 
