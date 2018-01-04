@@ -1,6 +1,6 @@
 program v3_donem_odevi;
 Uses Crt;
-Var 
+Var
     i,j,r:integer;
     e:integer;
     currentx, currenty:integer;
@@ -8,7 +8,7 @@ Var
     toplamDogruSayisi: integer;
     siraIndeksi:integer;
     computerPredictionX1, computerPredictionY1, computerPredictionX2, computerPredictionY2: integer;
-    m,n,g:integer;
+    m,n,g,g2:integer;
     x:integer;
     k,l,q,w:integer;
     dizi:Array[1..18] of integer;
@@ -46,6 +46,7 @@ Begin
         exit;
     end;
     g:=Trunc(n*n/2);
+    g2:=Trunc(n*n/4);
     for i:=1 to g do begin dizi[i]:=0;dizi2[i]:=0 end;
     m:=0;
     Randomize;
@@ -56,11 +57,11 @@ Begin
             e:=1;
             while e=1 do
             begin
-                if dizi[g]=0 then 
-                begin    
+                if dizi[g]=0 then
+                begin
                     x:=Random(g)+1;
                     for r:=1 to g do
-                    begin 
+                    begin
                         if dizi[r]=x then begin e:=2; end;
                     end;{3.cı for'un end'i}
                     if e=2 then
@@ -93,7 +94,7 @@ Begin
                             18:C[i][j]:='0';
                         end;{case'in end'i}
                         T[i][j]:='-'
-                    end;{else'in end'i}	    
+                    end;{else'in end'i}
                 end{then kolunun end'i}
                 else
                 begin
@@ -131,11 +132,11 @@ Begin
                             17:C[i][j]:='9';
                             18:C[i][j]:='0';
                         end;{case'in end'i}
-                        T[i][j]:='-' 
-                    end;{else'in end'i}	
-                end;{else kolunun end'i}        
+                        T[i][j]:='-'
+                    end;{else'in end'i}
+                end;{else kolunun end'i}
             end;{while'in end'i}
-        end;{2.for'un end'i}  
+        end;{2.for'un end'i}
     end;{1.for'un end'i}
 {*--------------------------------------------------------------------------------------------------------------------------------------------*}
 {*Oyunun baslamasi ve asil matris elemanlari belli sure gosterilir.*}
@@ -147,9 +148,9 @@ Begin
     begin
         gotoxy(1,i+2);Write(i,'|');
         gotoxy(2*i+1,1);Write(i);
-        gotoxy(2*i+1,2);Write('=');			    
+        gotoxy(2*i+1,2);Write('=');
         for j:=1 to n do
-        begin			    
+        begin
             gotoxy(2*j+1,i+2);Write(C[i][j]);
             if (i+j)=(2*n) then begin Delay(5000); end;
         end;
@@ -180,9 +181,9 @@ Begin
             gotoxy(2*w+1, q+2);Write(C[q][w]);
             gotoxy(currentx, currenty);
     {*--------------------------------------------------------------------------------------------------------------------------------------------*}
-    {*Matrisin elemanlari kiyaslanir.Ve esitse diger matriste gosterilir.*}               
+    {*Matrisin elemanlari kiyaslanir.Ve esitse diger matriste gosterilir.*}
             if C[k][l]=C[q][w] then
-            begin 
+            begin
                 Write('Dogru bildin...Aferin. Her dogru 1 puan verir.');
                 toplamDogruSayisi+=1;
                 playerScore+=1;
@@ -190,34 +191,49 @@ Begin
                 T[q][w]:=C[q][w];
             end
             else
-            begin 
+            begin
                 Write('Yanlis bildin...(Her yanlis ta bir sey olmaz.)');
             end;
             Delay(5000);
         end
         else {* sira bilgisayarda *}
         begin
-            Writeln('Sira bilgisayarda aq.');
-            computerPredictionX1 := Random(g)+1;
-            computerPredictionY1 := Random(g)+1;
+            Writeln('Sira bilgisayarda.');
+            computerPredictionX1 := Random(g2)+1;
+            computerPredictionY1 := Random(g2)+1;
             currentx := WhereX;
             currenty := WhereY;
             gotoxy(2*computerPredictionY1+1, computerPredictionX1+2);Write(C[computerPredictionX1][computerPredictionY1]);
             gotoxy(currentx, currenty);
             Delay(2000);
-            computerPredictionX2 := Random(g)+1;
-            computerPredictionY2 := Random(g)+1;
+            computerPredictionX2 := Random(g2)+1;
+            computerPredictionY2 := Random(g2)+1;
             currentx := WhereX;
             currenty := WhereY;
             gotoxy(2*computerPredictionY2+1, computerPredictionX2+2);Write(C[computerPredictionX2][computerPredictionY2]);
             gotoxy(currentx, currenty);
+            writeln('Bilgisayarin hamlesi : ','(',computerPredictionX1,' , ',computerPredictionY1,')','(',computerPredictionX2,' , ',computerPredictionY2,')' );
+            {*Bilgisayar puan kontrolü...*}
+            if C[computerPredictionX1][computerPredictionY1]=C[computerPredictionX2][computerPredictionY2] then
+            begin
+                Write(' Bilgisayar Dogru bildi.... Her dogru 1 puan verir.');
+                toplamDogruSayisi+=1;
+                computerScore+=1;
+                T[computerPredictionX1][computerPredictionY1]:=C[computerPredictionX1][computerPredictionY1];
+                T[computerPredictionX2][computerPredictionY2]:=C[computerPredictionX2][computerPredictionY2];
+            end
+            else
+            begin
+                Write('Bilgisayar yanlis bildi...(Her yanlis ta bir sey olmaz.)');
+
+            end;
+            Delay(3000);
             Readln();
         end;
         //Readln;Clrscr;
         Clrscr;
-        siraIndeksi+=1;                
+        siraIndeksi+=1;
 	end;{while'in end'i}
     Write('Tebrikler.Oyun tamamlandi.');
     Readln;
 End.
-
