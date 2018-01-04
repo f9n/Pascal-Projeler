@@ -7,7 +7,7 @@ Var
     playerScore, computerScore: integer;
     toplamDogruSayisi: integer;
     siraIndeksi:integer;
-    computerPredictionX1, computerPredictionY1, computerPredictionX2, computerPredictionY2: integer;
+    computerPredictionX1, computerPredictionY1, computerPredictionX2, computerPredictionY2:integer;
     m,n,g,g2:integer;
     x:integer;
     k,l,q,w:integer;
@@ -15,6 +15,9 @@ Var
     dizi2:Array[1..18] of integer;
     C:Array[1..6,1..6] of char;
     T:Array[1..6,1..6] of char;
+    aynimi:integer;
+    oncedenacilmismi:integer;
+    AcilmisIsaretler:Array[1..36] of char;
 Procedure Display_Game_Info;
 BEGIN
     for i:=1 to n do
@@ -189,6 +192,8 @@ Begin
                 playerScore+=1;
                 T[k][l]:=C[k][l];
                 T[q][w]:=C[q][w];
+                {* dogru olan isaretleri topluyoruz. *}
+                AcilmisIsaretler[toplamDogruSayisi] := C[k][l];
             end
             else
             begin
@@ -199,19 +204,64 @@ Begin
         else {* sira bilgisayarda *}
         begin
             Writeln('Sira bilgisayarda.');
-            computerPredictionX1 := Random(g2)+1;
-            computerPredictionY1 := Random(g2)+1;
+            {* onceden acilmis mi kontrol et. 1.ci x ve y icin. *}
+            oncedenacilmismi := 0;
+            while oncedenacilmismi = 0 do
+            begin
+                computerPredictionX1 := Random(g2)+1;
+                computerPredictionY1 := Random(g2)+1;
+                Writeln('Dongu icindeki: x1 ve y1: ', computerPredictionX1, ' ',computerPredictionY1);
+                Writeln('ToplamDogruSayisi: ', toplamDogruSayisi);
+                Writeln('Deger: ', C[computerPredictionX1][computerPredictionY1]);
+                for i:=1 to toplamDogruSayisi do
+                begin
+                    Writeln('AcilmisIsaret: ', AcilmisIsaretler[i]);
+                    if AcilmisIsaretler[i] = C[computerPredictionX1][computerPredictionY1] then
+                    begin
+                        oncedenacilmismi := 1;
+                        Writeln('Evet onceden acilmis.');
+                    end;
+                end;
+            end;
+
+            {* onceden acilmis mi kontrol et, ve 1.ci x ve y ile ayni mi kontrol et.* }
+            oncedenacilmismi := 0;
+            aynimi := 0;
+            while (oncedenacilmismi = 0) OR (aynimi = 0) do
+            begin
+                computerPredictionX2 := Random(g2)+1;
+                computerPredictionY2 := Random(g2)+1;
+                Writeln('Dongu icindeki: x2 ve y2: ', computerPredictionX2, ' ',computerPredictionY2);
+                Writeln('ToplamDogruSayisi: ', toplamDogruSayisi);
+                for i:=1 to toplamDogruSayisi do
+                begin
+                    Writeln('AcilmisIsaret: ', AcilmisIsaretler[i]);
+                    if not (AcilmisIsaretler[i] = C[computerPredictionX2][computerPredictionY2]) then
+                    begin
+                        oncedenacilmismi := 1;
+                    end;
+                end;
+                if not ((computerPredictionX1 = computerPredictionX2) AND (computerPredictionY1 = computerPredictionY2)) then
+                begin
+                    aynimi := 1;
+                end;
+            end;
+            
+            {* suanki x y kordinatlari ogren. *}
             currentx := WhereX;
             currenty := WhereY;
-            gotoxy(2*computerPredictionY1+1, computerPredictionX1+2);Write(C[computerPredictionX1][computerPredictionY1]);
+
+            {* 1.ci random kordinati yaz.*}
+            gotoxy(2*computerPredictionY1+1, computerPredictionX1+2);
+            Write(C[computerPredictionX1][computerPredictionY1]);
+
+            {* 2.ci random kordinati yaz. *}
+            gotoxy(2*computerPredictionY2+1, computerPredictionX2+2);
+            Write(C[computerPredictionX2][computerPredictionY2]);
+
+            {* eski yere don. *}
             gotoxy(currentx, currenty);
-            Delay(2000);
-            computerPredictionX2 := Random(g2)+1;
-            computerPredictionY2 := Random(g2)+1;
-            currentx := WhereX;
-            currenty := WhereY;
-            gotoxy(2*computerPredictionY2+1, computerPredictionX2+2);Write(C[computerPredictionX2][computerPredictionY2]);
-            gotoxy(currentx, currenty);
+
             writeln('Bilgisayarin hamlesi : ','(',computerPredictionX1,' , ',computerPredictionY1,')','(',computerPredictionX2,' , ',computerPredictionY2,')' );
             {*Bilgisayar puan kontrolü...*}
             if C[computerPredictionX1][computerPredictionY1]=C[computerPredictionX2][computerPredictionY2] then
@@ -221,11 +271,11 @@ Begin
                 computerScore+=1;
                 T[computerPredictionX1][computerPredictionY1]:=C[computerPredictionX1][computerPredictionY1];
                 T[computerPredictionX2][computerPredictionY2]:=C[computerPredictionX2][computerPredictionY2];
+                AcilmisIsaretler[toplamDogruSayisi] := C[computerPredictionX1][computerPredictionY1];
             end
             else
             begin
                 Write('Bilgisayar yanlis bildi...(Her yanlis ta bir sey olmaz.)');
-
             end;
             Delay(3000);
             Readln();
